@@ -68,6 +68,12 @@ else
     })
 }
 
+app.get('*', (req, res) => {
+    res.render('404', {
+        error: 'MY bad 404 error!'
+    })
+})
+
 app.listen(3000, () => {
     console.log('Server is up')
 })
