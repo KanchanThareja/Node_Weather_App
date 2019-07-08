@@ -2,11 +2,18 @@ const express = require('express')
 const path = require('path')
 const geocode = require('./utils/geocode')
 const forecast = require('./utils/forecast')
+const hbs = require('hbs')
 
 const app = express() 
+const partialsDir = path.join(__dirname, "/partials" )
+
 
 app.set('view engine', 'hbs')
-app.use(express.static(path.join(__dirname + "/public")))
+
+hbs.registerPartials(partialsDir)
+app.use(express.static(path.join(__dirname, "/public")))
+
+
 
 const address = process.argv[2]
 
@@ -16,6 +23,22 @@ app.get('', (req, res) => {
         name: 'kanchan'
     })
 })
+
+
+app.get('/about', (req, res) => {
+    res.render('about', {
+        title: 'About Me',
+        name: 'kanchan'
+    })
+})
+
+app.get('/help', (req, res) => {
+    res.render('help', {
+        title: 'weateryyyy',
+        name: 'kanchan'
+    })
+})
+
 if(!address)
 {
     console.log('Invalid Input')
