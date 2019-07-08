@@ -5,9 +5,17 @@ const forecast = require('./utils/forecast')
 
 const app = express() 
 
+app.set('view engine', 'hbs')
 app.use(express.static(path.join(__dirname + "/public")))
+
 const address = process.argv[2]
 
+app.get('', (req, res) => {
+    res.render('index', {
+        title: 'weateryyyy',
+        name: 'kanchan'
+    })
+})
 if(!address)
 {
     console.log('Invalid Input')
