@@ -1,7 +1,11 @@
-const request = require('request')
+const express = require('express') 
+const path = require('path')
 const geocode = require('./utils/geocode')
 const forecast = require('./utils/forecast')
 
+const app = express() 
+
+app.use(express.static(path.join(__dirname + "/public")))
 const address = process.argv[2]
 
 if(!address)
@@ -10,20 +14,29 @@ if(!address)
 }
 else
 {
-    geocode(address, (error, data) => {
+    geocode(address, (error, {latitude, longitude, location}) => {
         if(error)
         console.log(error)
         else
         {
-            forecast(data.longitude, data.latitude, (error, data) => {
+            forecast(longitude, latitude, (error, data) => {
                 if(error)
                 console.log(error)
                 else
-                console.log(data)
+                {
+                    app.get('/weather', (req, res) => {     
+                        res.send({
+                            data,
+                            location
+                        }) 
+                    }) 
+                    
+                }
             })
         }
     })
 }
 
-
-
+app.listen(3000, () => {
+    console.log('Server is up')
+})
