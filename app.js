@@ -13,10 +13,6 @@ app.set('view engine', 'hbs')
 hbs.registerPartials(partialsDir)
 app.use(express.static(path.join(__dirname, "/public")))
 
-
-
-const address = process.argv[2]
-
 app.get('', (req, res) => {
     res.render('index', {
         title: 'weateryyyy',
@@ -39,34 +35,35 @@ app.get('/help', (req, res) => {
     })
 })
 
-if(!address)
-{
-    console.log('Invalid Input')
-}
-else
-{
-    geocode(address, (error, {latitude, longitude, location}) => {
+app.get('/weather', (req, res) => {     
+    if(!req.query.address)
+    {
+        return res.send({
+            error: 'NO address provided'
+        })
+    }
+
+    geocode(req.query.address, (error, {latitude, longitude, location} = {}) => {
         if(error)
-        console.log(error)
+        return res.send({error})
         else
         {
             forecast(longitude, latitude, (error, data) => {
                 if(error)
-                console.log(error)
+                return res.send({error})
                 else
-                {
-                    app.get('/weather', (req, res) => {     
+                { 
                         res.send({
-                            data,
-                            location
-                        }) 
-                    }) 
-                    
+                            'forecast': data,
+                            location,
+                            'address': req.query.address
+                        })
                 }
             })
         }
     })
-}
+})
+    
 
 app.get('*', (req, res) => {
     res.render('404', {
