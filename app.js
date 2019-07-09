@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, "/public")))
 
 app.get('', (req, res) => {
     res.render('index', {
-        title: 'weateryyyy',
+        title: 'WeatherOn',
         name: 'kanchan'
     })
 })
@@ -30,7 +30,7 @@ app.get('/about', (req, res) => {
 
 app.get('/help', (req, res) => {
     res.render('help', {
-        title: 'weateryyyy',
+        title: 'WeatherOn Help',
         name: 'kanchan'
     })
 })
